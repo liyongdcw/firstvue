@@ -24,29 +24,21 @@
       </template>
     </el-table-column>
   </el-table>
-  <el-dialog
-  title="创建需求"
-  :visible.sync="dialogVisible"
-  width="30%"
-  :before-close="handleClose">
-  <div>
-      {{tempData}}
-  </div>
-  <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-  </span>
-</el-dialog>
+  <re-details ref="details" v-bind:row=tempData></re-details>
 </div>
 </template>
 
 <script>
+import Details from "./details";
 export default {
+  components:{
+    're-details':Details,
+  },
   methods: {
     editRow(row) {
-      this.dialogVisible = true;
-      console.log(row)
       this.tempData = row
+      this.$refs.details.editData()
+      console.log(row)
       console.log(this.tempData)
     },
     deleteRow(index, rows) {
@@ -56,13 +48,6 @@ export default {
         })
         .catch(_ => {});
     },
-    handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(_ => {
-            done();
-          })
-          .catch(_ => {});
-      }
   },
 
   data() {
